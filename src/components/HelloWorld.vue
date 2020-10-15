@@ -16,7 +16,7 @@
   <!-- 筛选 -->
     <div style="margin: 10px">
 
-    <a-label>选择类型： </a-label>
+    <span>选择类型： </span>
     <a-select
       v-model="search.filtertype"
       placeholder="选择类型"
@@ -28,7 +28,7 @@
       </a-select-option>
     </a-select>
 
-    <a-label style="margin-left: 100px">额度条件： </a-label>
+    <span style="margin-left: 100px">额度条件： </span>
     <a-select
       v-model="search.filteroperator"
       placeholder="条件"
@@ -62,12 +62,16 @@
         :pagination="pagination"
         @change="handleTableChange"
       >
-      <span slot="timestamp" slot-scope="timestamp">{{ formatterTime(timestamp) }}</span>
-      <span slot="message" slot-scope="message">
-        <span v-if="message">{{ message }}</span>
-        <span v-else>N/A</span>
-      </span>
-      <span slot="value" slot-scope="value">{{ formatFilValue(value) }}</span>
+      <!-- <span slot="timestamp" slot-scope="timestamp">{{ formatterTime(timestamp) }}</span> -->
+      <div slot="cid" slot-scope="cid">
+        <div class="cid" type="link" block @click="gotomessage(cid)">
+        {{fix(cid)}}
+        </div>
+      </div>
+      <div slot="from" slot-scope="from">
+        {{fix(from)}}
+      </div>
+      <!-- <span slot="value" slot-scope="value">{{ formatFilValue(value) }}</span> -->
 
     </a-table>
 
@@ -81,28 +85,30 @@ import moment from 'moment'
 const columns = [
   {
     title: '区块高度',
-    dataIndex: 'height',
-    key: 'height',
-
+    dataIndex: 'block_height',
+    key: 'block_height',
+    width: '8%',
   },
   {
     title: '时间',
-    dataIndex: 'timestamp',
-    key: 'timestamp',
-    scopedSlots: { customRender: 'timestamp'},
+    dataIndex: 'timestamp_str',
+    key: 'timestamp_str',
+    width: '12%',
+
   },
   {
     title: '消息id',
-    dataIndex: 'message',
-    key: 'message',
+    dataIndex: 'cid',
+    key: 'cid',
     ellipsis: true,
-    scopedSlots: { customRender: 'message'},
+    scopedSlots: { customRender: 'cid'},
   },
   {
     title: 'from',
     dataIndex: 'from',
     key: 'from',
     ellipsis: true,
+    scopedSlots: { customRender: 'from'},
   },
   {
     title: 'to',
@@ -112,10 +118,10 @@ const columns = [
   },
   {
     title: '值',
-    key: 'value',
-    dataIndex: 'value',
+    key: 'income_str',
+    dataIndex: 'income_str',
     scopedSlots: { customRender: 'value'},
-
+    width: '20%',
   },
   {
     title: '类型',
@@ -191,6 +197,16 @@ export default {
     },
     submitFilter: function() {
       this.getTransfers(1, 20)
+    },
+    gotomessage: function(cid) {
+       var href="https://filscout.io/zh/pc/message/" + cid
+       window.open(href,'_blank')
+    },
+    fix: function(str) {
+      if  (str.length > 10) {
+        return str.substring(0, 6)+'****'+str.substring(str.length-6,str.length)
+      }
+      return str
     }
   },
   data: function() {
@@ -274,4 +290,14 @@ li {
 a {
   color: #42b983;
 }
+
+.cid {
+
+  text-overflow:ellipsis;
+  cursor:pointer;
+}
+.cid:hover{
+  color:blue;
+}
+
 </style>
