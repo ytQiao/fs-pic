@@ -1,5 +1,5 @@
 {
-  "name": "wallet-ui",
+  "name": "view-pictures",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,8 @@
     "ant-design-vue": "^1.6.5",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-router": "^3.4.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
